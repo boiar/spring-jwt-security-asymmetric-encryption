@@ -1,5 +1,7 @@
 package com.example.auth_security.user.service.impl;
 
+import com.example.auth_security.exception.BusinessException;
+import com.example.auth_security.exception.ErrorCode;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.mapper.UserMapper;
 import com.example.auth_security.user.repository.UserRepository;
@@ -12,49 +14,86 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.example.auth_security.exception.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        return this.userRepository.findByEmailIgnoreCase(userEmail)
+        return this.userRepo.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found !"));
     }
 
 
     @Override
     public void updateProfileInfo(ProfileUpdateRequest req, String userId) {
-        User userObj = this.userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found !"));
+        User userObj = this.userRepo.findById(userId)
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
 
-
+        this.userMapper.mergeUserInfo(userObj, req);
+        this.userRepo.save(userObj);
     }
 
     @Override
     public void changePassword(ChangePasswordRequest req, String userId) {
+        if (!req.getNewPassword()
+                .equals(req.getConfirmPassword())) {
+            throw new BusinessException(CHANGE_PASSWORD_MISMATCH);
+        }
 
+        final User savedUser = this.userRepo.findById(userId)
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
+
+
+        if (!this.passwordEncoder.matches(req.getCurrentPassword(),
+                savedUser.getPassword())) {
+            throw new BusinessException(INVALID_CURRENT_PASSWORD);
+        }
+
+        final String encoded = this.passwordEncoder.encode(req.getNewPassword());
+        savedUser.setPassword(encoded);
+        this.userRepo.save(savedUser);
     }
 
     @Override
     public void deactivateAccount(String userId) {
+        final User user = this.userRepo.findById(userId)
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
 
+        if (!user.isEnabled()) {
+            throw new BusinessException(ACCOUNT_ALREADY_DEACTIVATED);
+        }
+
+        user.setEnabled(false);
+        this.userRepo.save(user);
     }
 
     @Override
     public void reactivateAccount(String userId) {
+        final User user = this.userRepo.findById(userId)
+                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
 
+        if (user.isEnabled()){
+            throw new BusinessException(ACCOUNT_ALREADY_ACTIVATED);
+        }
+
+        user.setEnabled(true);
+        this.userRepo.save(user);
     }
 
     @Override
     public void deleteAccount(String userId) {
-
+        // this method need the rest of the entities
+        // the logic is just to schedule a profile for deletion
+        // and then a scheduled job will pick up the profiles and delete everything
     }
 
 

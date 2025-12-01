@@ -23,7 +23,7 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private String id;
 
     @CreatedDate
     @Column(name = "created_date", updatable = false, nullable = false)
