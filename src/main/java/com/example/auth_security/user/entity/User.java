@@ -1,10 +1,11 @@
 package com.example.auth_security.user.entity;
 
-import com.example.auth_security.common.BaseEntity;
-import com.example.auth_security.role.Role;
+import com.example.auth_security.common.entity.BaseEntity;
+import com.example.auth_security.role.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
@@ -84,7 +85,7 @@ public class User extends BaseEntity implements UserDetails {
         if (CollectionUtils.isEmpty(this.roles)){
             return List.of();
         }
-        return this.roles.stream(role -> new SimpleAuthorityMapper(role.getName())).toList();
+        return this.roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
     }
 
     @Override

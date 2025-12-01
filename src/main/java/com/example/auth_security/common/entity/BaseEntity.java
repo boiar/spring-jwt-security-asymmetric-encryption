@@ -1,4 +1,4 @@
-package com.example.auth_security.common;
+package com.example.auth_security.common.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

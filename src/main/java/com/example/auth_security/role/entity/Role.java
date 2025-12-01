@@ -1,6 +1,6 @@
-package com.example.auth_security.role;
+package com.example.auth_security.role.entity;
 
-import com.example.auth_security.common.BaseEntity;
+import com.example.auth_security.common.entity.BaseEntity;
 import com.example.auth_security.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,8 +24,8 @@ public class Role extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
-
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
+
 
 }
