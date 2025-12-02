@@ -8,20 +8,38 @@ This project explains the importance of asymmetric encryption in securing JWTs (
 ```
 src/main/
 ├── java/com/example/auth_security/
+│   ├── auth/
+│   │   ├── controller
+│   │   ├── service
+│   │   │   ├── impl
+│   │   │   └── interfaces
+│   │   ├── request
+│   │   └── response 
+│   │
 │   ├── common/
-│   │   └── config/
+│   │   ├── config
+│   │   ├── entity
+│   │   ├── messages
+│   │   ├── request
+│   │   └── validation
+│   │
+│   ├── security
+│   │
+│   ├── exception
 │   │
 │   ├── role/
-│   │   └── entity/
+│   │   └── entity
 │   │
 │   ├── user/
-│   │   ├── controller/
-│   │   ├── entity/
-│   │   ├── service/
-│   │   │   ├── impl/
+│   │   ├── controller
+│   │   ├── entity
+│   │   ├── service
+│   │   │   ├── impl
 │   │   │   └── interfaces
-│   │   ├── repository/
-│   │   └── messages/
+│   │   ├── repository
+│   │   ├── request
+│   │   ├── mapper
+│   │   └── messages
 │   │
 │
 └── resources/
