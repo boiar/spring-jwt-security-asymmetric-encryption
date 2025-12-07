@@ -9,6 +9,8 @@ import com.example.auth_security.user.service.interfaces.UserService;
 import com.example.auth_security.user.request.ChangePasswordRequest;
 import com.example.auth_security.user.request.ProfileUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

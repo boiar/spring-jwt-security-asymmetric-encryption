@@ -12,12 +12,12 @@ import lombok.*;
 @Builder
 public class AuthenticationRequest {
 
-    @NotBlank(message = "EMAIL_NOT_BLANK")
-    @Email(message = "ERR_EMAIL_FORMAT")
+    @NotBlank(message = "email.not.blank")
+    @Email(message = "err.email.format")
     @Schema(example = "ali@mail.com")
     String email;
 
-    @NotBlank(message = "PASSWORD_NOT_BLANK")
+    @NotBlank(message = "password.not.blank")
     @Schema(example = "pAssword1!_")
     String password;
 }

@@ -11,13 +11,18 @@ import com.example.auth_security.security.JwtService;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.mapper.UserMapper;
 import com.example.auth_security.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Service
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
@@ -51,13 +56,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void register(RegistrationRequest request) {
+    @Transactional
+    public void register(RegistrationRequest req) {
+        checkUserEmail(req.getEmail());
+        checkUserPhoneNumber(req.getPhoneNumber());
+        checkPasswords(req.getPassword(), req.getConfirmPassword());
+
+        /*TODO User Roles*/
+        final User user = this.userMapper.toUser(req);
+        //user.setRoles();
+        log.debug("Saving user {}", user);
+        this.userRepo.save(user);
 
     }
 
     @Override
-    public AuthenticationResponse refreshToken(RefreshRequest request) {
-        return null;
+    public AuthenticationResponse refreshToken(RefreshRequest req) {
+        final String newAccessToken = this.jwtService.refreshAccessToken(req.getRefreshToken());
+        final String tokenType = "Bearer";
+        return AuthenticationResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(req.getRefreshToken())
+                .tokenType(tokenType)
+                .build();
     }
 
 

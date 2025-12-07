@@ -4,9 +4,9 @@ import com.example.auth_security.common.entity.BaseEntity;
 import com.example.auth_security.role.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
@@ -19,10 +19,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     /* Cols */
     @Column(name = "first_name", nullable = false)

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -36,20 +37,20 @@ public class JwtFilter extends OncePerRequestFilter {
             final FilterChain filterChain) throws ServletException, IOException {
 
         // skip auth paths from jwt filter
-        if (request.getServletPath().contains("api/v1/auth")) {
+        if (new AntPathMatcher().match("/api/v1/auth/**", request.getServletPath())) {
             filterChain.doFilter(request, response);
             return;
         }
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String jwt;
-        final String username;
 
-        if (authHeader == null || authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        final String jwt;
+        final String username;
         jwt = authHeader.substring(7);
         username = this.jwtService.extractUsername(jwt);
 

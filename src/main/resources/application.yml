@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:classpath:.env
   application:
     name: auth-security
   datasource:
@@ -17,13 +19,32 @@ spring:
         format_sql: true
 
   messages:
-    basename: messages/messages
     encoding: UTF-8
     use-code-as-default-message: true
 
+  server:
+    servlet:
+      encoding:
+        charset: UTF-8
+        enabled: true
+        force: true
+
+
 
 app:
+  lang:
+    default-locale: en
+    cache-seconds: 3600
+    debug: false
+    supported-languages:
+      - en
+      - ar
+
   security:
     jwt:
+      private-key: ${APP_SECURITY_JWT_PRIVATE_KEY_PATH}
+      public-key: ${APP_SECURITY_JWT_PUBLIC_KEY_PATH}
       access-token-expiration: 86400000       # 24h for local testing, recommended for production -> 900000 (15 min)
       refresh-token-expiration: 604800000    # 7 days
+
+    disposable-email: 10minutemail,20minutemail,33mail,5ymail,anonbox,guerrillamail,mailinator,maildrop,mailnesia,moakt,my10minutemail,throwawaymail,trashmail,temp-mail,tempmail,truemail,yopmail

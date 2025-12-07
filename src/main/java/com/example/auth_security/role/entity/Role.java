@@ -9,12 +9,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@Entity
 @Table(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
 public class Role extends BaseEntity {
@@ -24,8 +24,14 @@ public class Role extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
+
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
+
+
+    public String getName() {
+        return this.name;
+    }
 
 
 }

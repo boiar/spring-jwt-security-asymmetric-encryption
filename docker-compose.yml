@@ -1,13 +1,12 @@
 services:
   postgres:
     container_name: spring_sec_auth
-    image: 17.5
+    image: postgres:17.5
     environment:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgress
       POSTGRES_DB: spring_app_db
-
     volumes:
       - postgres:/data/postgres
     ports:

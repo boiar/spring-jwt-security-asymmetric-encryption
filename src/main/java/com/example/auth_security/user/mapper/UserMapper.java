@@ -1,12 +1,11 @@
 package com.example.auth_security.user.mapper;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.example.auth_security.common.request.RegistrationRequest;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.request.ProfileUpdateRequest;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserMapper {
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     public User toUser(final RegistrationRequest request) {

@@ -1,5 +1,6 @@
 package com.example.auth_security.common.request;
 
+import com.example.auth_security.common.validation.NonDisposableEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -43,7 +44,7 @@ public class RegistrationRequest {
 
     @NotBlank(message = "{REGISTRATION_EMAIL_BLANK}")
     @Email(message = "{REGISTRATION_EMAIL_FORMAT}")
-    //    @NonDisposableEmail(message = "VALIDATION_REGISTRATION_EMAIL_DISPOSABLE")
+    @NonDisposableEmail(message = "VALIDATION_REGISTRATION_EMAIL_DISPOSABLE")
     @Schema(example = "ali@gmail.com")
     String email;
 
