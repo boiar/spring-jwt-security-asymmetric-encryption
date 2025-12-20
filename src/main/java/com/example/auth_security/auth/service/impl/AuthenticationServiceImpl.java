@@ -2,16 +2,19 @@ package com.example.auth_security.auth.service.impl;
 
 import com.example.auth_security.auth.exception.AuthErrorCode;
 import com.example.auth_security.auth.exception.AuthException;
+import com.example.auth_security.auth.mapper.AuthMapper;
+import com.example.auth_security.auth.request.RegisterRequest;
+import com.example.auth_security.auth.response.RefreshTokenResponse;
+import com.example.auth_security.auth.response.RegisterResponse;
 import com.example.auth_security.auth.service.interfaces.AuthenticationService;
-import com.example.auth_security.auth.request.AuthenticationRequest;
+import com.example.auth_security.auth.request.LoginRequest;
 import com.example.auth_security.auth.request.RefreshRequest;
-import com.example.auth_security.auth.response.AuthenticationResponse;
-import com.example.auth_security.common.request.RegistrationRequest;
-import com.example.auth_security.security.JwtService;
+import com.example.auth_security.auth.response.LoginResponse;
+import com.example.auth_security.core.security.JwtService;
 import com.example.auth_security.user.entity.User;
-import com.example.auth_security.user.mapper.UserMapper;
 import com.example.auth_security.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +31,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepo;
     private final JwtService jwtService;
-    private final UserMapper userMapper;
+    private final AuthMapper authMapper;
 
 
     @Override
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         final Authentication auth = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
@@ -47,45 +50,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String token = this.jwtService.generateAccessToken(user.getUsername());
         final String refreshToken = this.jwtService.generateRefreshToken(user.getUsername());
         final String tokenType = "Bearer";
-        return AuthenticationResponse.builder()
-                .accessToken(token)
-                .refreshToken(refreshToken)
-                .tokenType(tokenType)
-                .build();
-
+        return authMapper.toLoginResponse(token, refreshToken, tokenType);
     }
+
 
     @Override
     @Transactional
-    public void register(RegistrationRequest req) {
+    public RegisterResponse register(@Valid RegisterRequest req) {
         checkUserEmail(req.getEmail());
         checkUserPhoneNumber(req.getPhoneNumber());
         checkPasswords(req.getPassword(), req.getConfirmPassword());
 
+        final User user = this.authMapper.toUserEntity(req);
+        user.setCreatedBy("user");
         /*TODO User Roles*/
-        final User user = this.userMapper.toUser(req);
         //user.setRoles();
-        log.debug("Saving user {}", user);
         this.userRepo.save(user);
 
+        final String token = this.jwtService.generateAccessToken(user.getUsername());
+        final String refreshToken = this.jwtService.generateRefreshToken(user.getUsername());
+        final String tokenType = "Bearer";
+        return authMapper.toRegisterResponse(token, refreshToken, tokenType, user);
     }
 
     @Override
-    public AuthenticationResponse refreshToken(RefreshRequest req) {
+    public RefreshTokenResponse refreshToken(RefreshRequest req) {
         final String newAccessToken = this.jwtService.refreshAccessToken(req.getRefreshToken());
         final String tokenType = "Bearer";
-        return AuthenticationResponse.builder()
-                .accessToken(newAccessToken)
-                .refreshToken(req.getRefreshToken())
-                .tokenType(tokenType)
-                .build();
+        return authMapper.toRefreshTokenResponse(newAccessToken, tokenType);
     }
 
 
     private void checkUserEmail(final String email) {
         final boolean emailExists = this.userRepo.existsByEmailIgnoreCase(email);
         if (emailExists) {
-            throw new AuthException(AuthErrorCode.BAD_CREDENTIALS);
+            throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
         }
     }
 

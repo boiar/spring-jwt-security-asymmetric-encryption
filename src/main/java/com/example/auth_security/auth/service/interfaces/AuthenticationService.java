@@ -1,15 +1,22 @@
 package com.example.auth_security.auth.service.interfaces;
 
-import com.example.auth_security.auth.request.AuthenticationRequest;
+import com.example.auth_security.auth.request.LoginRequest;
 import com.example.auth_security.auth.request.RefreshRequest;
-import com.example.auth_security.auth.response.AuthenticationResponse;
-import com.example.auth_security.common.request.RegistrationRequest;
-import org.springframework.security.core.Authentication;
+import com.example.auth_security.auth.request.RegisterRequest;
+import com.example.auth_security.auth.response.LoginResponse;
+import com.example.auth_security.auth.response.RefreshTokenResponse;
+import com.example.auth_security.auth.response.RegisterResponse;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 public interface AuthenticationService {
 
-    AuthenticationResponse login(AuthenticationRequest request);
-    void register(RegistrationRequest request);
-    AuthenticationResponse refreshToken(RefreshRequest request);
+    LoginResponse login(LoginRequest request);
+
+
+    @Transactional
+    RegisterResponse register(@Valid RegisterRequest req);
+
+    RefreshTokenResponse refreshToken(RefreshRequest request);
 
 }

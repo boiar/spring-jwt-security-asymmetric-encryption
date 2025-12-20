@@ -10,15 +10,16 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 public enum AuthErrorCode {
 
-    BAD_CREDENTIALS("err.bad.credentials", UNAUTHORIZED),
-    USER_DISABLED("err.user.disabled", UNAUTHORIZED),
-    INTERNAL_EXCEPTION("err.internal.exception", INTERNAL_SERVER_ERROR),
-    ERR_SENDING_ACTIVATION_EMAIL("err.sending.activation.email", INTERNAL_SERVER_ERROR),
-    INVALID_CURRENT_PASSWORD("err.invalid.current.password", BAD_REQUEST),
+    BAD_CREDENTIALS("err.bad_credentials", UNAUTHORIZED),
+    USER_DISABLED("err.user_disabled", UNAUTHORIZED),
+    INTERNAL_EXCEPTION("err.internal_exception", INTERNAL_SERVER_ERROR),
+    ERR_SENDING_ACTIVATION_EMAIL("err.sending_activation_email", INTERNAL_SERVER_ERROR),
+    INVALID_CURRENT_PASSWORD("err.invalid_current_password", BAD_REQUEST),
     PASSWORD_MISMATCH("err.password.mismatch", BAD_REQUEST),
-    PHONE_ALREADY_EXISTS("err.phone.already.exists", BAD_REQUEST),
-    CHANGE_PASSWORD_MISMATCH("err.change.password.mismatch", BAD_REQUEST),
-    USERNAME_NOT_FOUND("err.username.not.found", NOT_FOUND);
+    PHONE_ALREADY_EXISTS("err.phone.already_exists", BAD_REQUEST),
+    EMAIL_ALREADY_EXISTS("err.email.already_exists", BAD_REQUEST),
+    CHANGE_PASSWORD_MISMATCH("err.change_password_mismatch", BAD_REQUEST),
+    USERNAME_NOT_FOUND("err.username_not_found", NOT_FOUND);
 
 
     private final String code;

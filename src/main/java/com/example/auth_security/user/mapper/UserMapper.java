@@ -1,36 +1,14 @@
 package com.example.auth_security.user.mapper;
 
-import com.example.auth_security.common.request.RegistrationRequest;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.request.ProfileUpdateRequest;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserMapper {
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-
-    public User toUser(final RegistrationRequest request) {
-        return User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .phoneNumber(request.getPhoneNumber())
-                .password(this.passwordEncoder.encode(request.getPassword()))
-                .enabled(true)
-                .locked(false)
-                .credentialsExpired(false)
-                .emailVerified(false)
-                .phoneVerified(false)
-                .build();
-    }
 
 
     public void mergeUserInfo(final User user, final ProfileUpdateRequest request) {
