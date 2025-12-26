@@ -4,7 +4,7 @@ import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.exception.CategoryErrorCode;
 import com.example.auth_security.category.exception.CategoryException;
 import com.example.auth_security.category.mapper.CategoryMapper;
-import com.example.auth_security.category.repository.CategoryRepo;
+import com.example.auth_security.category.repository.CategoryRepository;
 import com.example.auth_security.category.request.CreateCategoryRequest;
 import com.example.auth_security.category.request.UpdateCategoryRequest;
 import com.example.auth_security.category.response.CategoryResponse;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +24,7 @@ import java.util.Objects;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
-    private final CategoryRepo categoryRepo;
+    private final CategoryRepository categoryRepo;
     @Override
     public Long createCategory(final CreateCategoryRequest request, final String userId) {
         checkCategoryExistsForUser(request.getName(), userId);
@@ -39,14 +38,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateCategory(final UpdateCategoryRequest request, final Long catId, final String userId) {
-        Category categoryWillUpdate = categoryRepo.findById(catId)
+        Category categoryWillUpdate = categoryRepo.findByIdForUser(catId, userId)
                                                 .orElseThrow(() ->
-                                                        new CategoryException(CategoryErrorCode.CATEGORY_NOT_EXISTS)
+                                                        new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION)
                                                 );
-
-        if (!Objects.equals(categoryWillUpdate.getActorData().getCreatedBy(), userId)) {
-            throw new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION);
-        }
 
         this.categoryMapper.mergeCategoryEntity(categoryWillUpdate, request);
         this.categoryRepo.save(categoryWillUpdate);
@@ -54,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponse> findAllByOwner(String userId) {
-        return this.categoryRepo.findAllCategoriesByUserId(userId)
+        return this.categoryRepo.findAllForUser(userId)
                                 .stream()
                                 .map(this.categoryMapper::toCategoryResponse)
                                 .toList();
@@ -69,18 +64,19 @@ public class CategoryServiceImpl implements CategoryService {
                            );
     }
 
+
+    private void checkCategoryExistsForUser(final String catName, final String userId) {
+        final boolean alreadyExistsForUser = this.categoryRepo.existsByNameForUser(catName, userId);
+        if (alreadyExistsForUser) {
+            throw new CategoryException(CategoryErrorCode.CATEGORY_ALREADY_EXISTS_FOR_USER);
+        }
+    }
+
     @Override
     public void deleteByCategoryId(Long catId) {
         // TODO
         // mark the category for deletion
         // the scheduler should pick up all the marked categories and perform the deletion
-    }
-
-    private void checkCategoryExistsForUser(final String catName, final String userId) {
-        final boolean alreadyExistsForUser = this.categoryRepo.findByNameAndUserId(catName, userId) > 0;
-        if (alreadyExistsForUser) {
-            throw new CategoryException(CategoryErrorCode.CATEGORY_ALREADY_EXISTS_FOR_USER);
-        }
     }
 
 }

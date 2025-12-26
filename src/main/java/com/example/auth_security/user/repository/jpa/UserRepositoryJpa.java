@@ -1,19 +1,13 @@
-package com.example.auth_security.user.repository;
+package com.example.auth_security.user.repository.jpa;
 
 import com.example.auth_security.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserRepositoryJpa extends JpaRepository<User, String> {
     boolean existsByEmailIgnoreCase(String email);
     boolean existsByPhoneNumber(String phoneNumber);
 
     Optional<User> findByEmailIgnoreCase(String email);
-
-
-    Optional<User> findById(String userId);
-
-    void save(User userObj);
-
 }
