@@ -2,6 +2,8 @@ package com.example.auth_security.todo.entity;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.common.entity.BaseEntity;
+import com.example.auth_security.common.entity.EntityAuditActorData;
+import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,11 +23,18 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @SuperBuilder
 @Table(name = "todos")
-public class Todo extends BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Embedded
+    private EntityAuditTimingData timingData = new EntityAuditTimingData();
+
+    @Embedded
+    private EntityAuditActorData actorData = new EntityAuditActorData();
 
     @Column(name = "title", nullable = false)
     private String title;

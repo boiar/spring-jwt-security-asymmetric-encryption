@@ -97,5 +97,10 @@ public class UserServiceImpl implements UserService {
         // and then a scheduled job will pick up the profiles and delete everything
     }
 
+    @Override
+    public User getUserById(String userId) {
+        return this.userRepo.findById(userId).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+    }
+
 
 }

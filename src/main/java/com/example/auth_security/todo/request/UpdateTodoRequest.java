@@ -2,10 +2,16 @@ package com.example.auth_security.todo.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UpdateTodoRequest {
 
     @NotBlank(message = "validation.todo.title.not_blank")
@@ -22,6 +28,6 @@ public class UpdateTodoRequest {
 
     private LocalTime startTime;
     private LocalTime endTime;
-    private String categoryId;
+    private Long categoryId;
 
 }

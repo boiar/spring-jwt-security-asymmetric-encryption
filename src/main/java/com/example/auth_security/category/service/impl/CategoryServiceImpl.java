@@ -11,6 +11,7 @@ import com.example.auth_security.category.response.CategoryResponse;
 import com.example.auth_security.category.service.interfaces.CategoryService;
 import com.example.auth_security.common.exception.CommonErrorCode;
 import com.example.auth_security.common.exception.CommonException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -78,5 +79,15 @@ public class CategoryServiceImpl implements CategoryService {
         // mark the category for deletion
         // the scheduler should pick up all the marked categories and perform the deletion
     }
+
+    @Override
+    public Category checkAndReturnCategory(final Long categoryId, final String userId) {
+        return this.categoryRepo.findByIdForUser(categoryId, userId)
+                                        .orElseThrow(() ->
+                                                new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION)
+                                        );
+    }
+
+
 
 }

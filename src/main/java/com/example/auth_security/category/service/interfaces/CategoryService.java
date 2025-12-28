@@ -1,5 +1,6 @@
 package com.example.auth_security.category.service.interfaces;
 
+import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.request.CreateCategoryRequest;
 import com.example.auth_security.category.request.UpdateCategoryRequest;
 import com.example.auth_security.category.response.CategoryResponse;
@@ -17,5 +18,8 @@ public interface CategoryService {
 
     CategoryResponse findByCategoryId(Long catId);
     void deleteByCategoryId(Long catId);
+
+    Category checkAndReturnCategory(final Long categoryId, final String userId);
+
 
 }

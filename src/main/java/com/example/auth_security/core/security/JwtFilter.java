@@ -20,6 +20,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.example.auth_security.core.security.PublicUrlsConstants.PUBLIC_URLS;
+
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -41,11 +43,12 @@ public class JwtFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
-        // skip auth paths from jwt filter
-        if (new AntPathMatcher().match("/api/v1/auth/**", request.getServletPath())) {
+        // skip auth public paths from jwt filter
+        if (isPublicPath(request)) {
             filterChain.doFilter(request, response);
             return;
         }
+
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -111,4 +114,18 @@ public class JwtFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.getWriter().write("{\"error\":\"" + error + "\",\"message\":\"" + message + "\"}");
     }
+
+
+    private boolean isPublicPath(HttpServletRequest request) {
+        AntPathMatcher matcher = new AntPathMatcher();
+        String path = request.getServletPath();
+
+        for (String pattern : PUBLIC_URLS) {
+            if (matcher.match(pattern, path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
