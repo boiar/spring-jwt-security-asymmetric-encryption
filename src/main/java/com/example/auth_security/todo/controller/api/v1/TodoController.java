@@ -1,7 +1,6 @@
 package com.example.auth_security.todo.controller.api.v1;
 
 
-import com.example.auth_security.common.service.interfaces.CurrentUserService;
 import com.example.auth_security.todo.request.CreateTodoRequest;
 import com.example.auth_security.todo.request.UpdateTodoRequest;
 import com.example.auth_security.todo.response.CreateTodoResponse;
@@ -16,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.kerberos.KerberosKey;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -27,15 +27,15 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class TodoController {
 
     private final TodoService todoService;
-    private final CurrentUserService currentUserService;
 
     @PostMapping
     public ResponseEntity<CreateTodoResponse> createTodo(
             @RequestBody
             @Valid
-            final CreateTodoRequest request
+            final CreateTodoRequest request,
+            final Authentication authentication
     ) {
-        final String userId = currentUserService.getUserId();
+        final String userId = ((User) authentication.getPrincipal()).getId();
         final Long todoId = this.todoService.createTodo(request, userId);
         return ResponseEntity.status(CREATED).body(new CreateTodoResponse(todoId));
     }
@@ -46,9 +46,10 @@ public class TodoController {
             @Valid
             final UpdateTodoRequest updateTodoRequest,
             @PathVariable("todo-id")
-            final Long todoId
+            final Long todoId,
+            final Authentication authentication
     ) {
-        final String userId = currentUserService.getUserId();
+        final String userId = ((User) authentication.getPrincipal()).getId();
         this.todoService.updateTodo(updateTodoRequest, todoId, userId);
         return ResponseEntity.accepted().build();
     }
@@ -62,23 +63,28 @@ public class TodoController {
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<TodoResponse>> findAllTodosByUserId(){
-        final String userId = currentUserService.getUserId();
+    public ResponseEntity<List<TodoResponse>> findAllTodosByUserId(
+            final Authentication authentication
+    ){
+        final String userId = ((User) authentication.getPrincipal()).getId();
         return ResponseEntity.ok(this.todoService.findAllTodosForToday(userId));
     }
 
     @GetMapping("/category/{category-id}")
     public ResponseEntity<List<TodoResponse>> findAllTodosByCategory(
             @PathVariable("category-id")
-            final Long categoryId
+            final Long categoryId,
+            final Authentication authentication
     ) {
-        final String userId = currentUserService.getUserId();
+        final String userId = ((User) authentication.getPrincipal()).getId();
         return ResponseEntity.ok(this.todoService.findAllTodosByCategory(categoryId, userId));
     }
 
     @GetMapping("/due")
-    public ResponseEntity<List<TodoResponse>> findAllDueTodos(){
-        final String userId = currentUserService.getUserId();
+    public ResponseEntity<List<TodoResponse>> findAllDueTodos(
+            final Authentication authentication
+    ){
+        final String userId = ((User) authentication.getPrincipal()).getId();
         return ResponseEntity.ok(this.todoService.findAllDueTodos(userId));
     }
 

@@ -10,6 +10,9 @@ import com.example.auth_security.auth.service.interfaces.AuthenticationService;
 import com.example.auth_security.auth.request.LoginRequest;
 import com.example.auth_security.auth.request.RefreshRequest;
 import com.example.auth_security.auth.response.LoginResponse;
+import com.example.auth_security.common.mail.dto.RegisterMailDto;
+import com.example.auth_security.common.mail.producer.MailQueueProducer;
+import com.example.auth_security.common.mail.service.interfaces.MailService;
 import com.example.auth_security.core.security.JwtService;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.repository.UserRepository;
@@ -32,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepo;
     private final JwtService jwtService;
     private final AuthMapper authMapper;
-
+    private final MailQueueProducer mailQueueProducer;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -62,10 +65,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         checkPasswords(req.getPassword(), req.getConfirmPassword());
 
         final User user = this.authMapper.toUserEntity(req);
-        user.setCreatedBy("user");
+
+        user.getActorData().setCreatedBy("user");
         /*TODO User Roles*/
         //user.setRoles();
         this.userRepo.save(user);
+
+        // send welcome mail
+        this.mailQueueProducer.enqueueRegisterMail(
+                RegisterMailDto.builder()
+                        .email(user.getEmail())
+                        .username(user.getUsername())
+                        .build()
+        );
 
         final String token = this.jwtService.generateAccessToken(user.getUsername());
         final String refreshToken = this.jwtService.generateRefreshToken(user.getUsername());

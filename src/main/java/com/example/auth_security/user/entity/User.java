@@ -1,6 +1,7 @@
 package com.example.auth_security.user.entity;
 
-import com.example.auth_security.common.entity.BaseEntity;
+import com.example.auth_security.common.entity.EntityAuditActorData;
+import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.role.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,11 +23,18 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "users")
-public class User extends BaseEntity implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Embedded
+    private EntityAuditTimingData timingData = new EntityAuditTimingData();
+
+    @Embedded
+    private EntityAuditActorData actorData = new EntityAuditActorData();
+
 
     /* Cols */
     @Column(name = "first_name", nullable = false)
@@ -92,17 +101,13 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
+    public String getPassword(){
+        return this.password;
     }
 
     @Override
-    public String getPassword(){
-        return this.password;
+    public String getUsername() {
+        return this.firstName + " " + this.lastName;
     }
 
     @Override
@@ -123,4 +128,17 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return !this.credentialsExpired;
     }
+
+
+    @PrePersist
+    public void prePersist() {
+        timingData.setCreatedDate(LocalDateTime.now());
+        timingData.setUpdatedDate(LocalDateTime.now());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        timingData.setUpdatedDate(LocalDateTime.now());
+    }
+
 }

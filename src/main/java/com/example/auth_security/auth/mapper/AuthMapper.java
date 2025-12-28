@@ -4,6 +4,8 @@ import com.example.auth_security.auth.request.RegisterRequest;
 import com.example.auth_security.auth.response.LoginResponse;
 import com.example.auth_security.auth.response.RefreshTokenResponse;
 import com.example.auth_security.auth.response.RegisterResponse;
+import com.example.auth_security.common.entity.EntityAuditActorData;
+import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class AuthMapper {
                 .credentialsExpired(false)
                 .emailVerified(false)
                 .phoneVerified(false)
+                .timingData(new EntityAuditTimingData())
+                .actorData(new EntityAuditActorData())
                 .build();
     }
 

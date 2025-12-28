@@ -31,6 +31,23 @@ spring:
         force: true
 
 
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 587
+    username: 4b738fcc00e026
+    password: 3f45e8e541bc5b
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 app:
   lang:

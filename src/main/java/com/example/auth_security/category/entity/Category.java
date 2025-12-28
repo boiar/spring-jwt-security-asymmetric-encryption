@@ -1,6 +1,5 @@
 package com.example.auth_security.category.entity;
 
-import com.example.auth_security.common.entity.BaseEntity;
 import com.example.auth_security.common.entity.EntityAuditActorData;
 import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.todo.entity.Todo;

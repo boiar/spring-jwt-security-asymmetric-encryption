@@ -1,6 +1,5 @@
 package com.example.auth_security.role.entity;
 
-import com.example.auth_security.common.entity.BaseEntity;
 import com.example.auth_security.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
-public class Role extends BaseEntity {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,9 +28,6 @@ public class Role extends BaseEntity {
     private List<User> users;
 
 
-    public String getName() {
-        return this.name;
-    }
 
 
 }
