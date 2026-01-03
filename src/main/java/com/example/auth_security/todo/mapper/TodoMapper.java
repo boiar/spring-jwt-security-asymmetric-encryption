@@ -2,6 +2,7 @@ package com.example.auth_security.todo.mapper;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.request.UpdateCategoryRequest;
+import com.example.auth_security.category.response.CategoryResponse;
 import com.example.auth_security.common.entity.EntityAuditActorData;
 import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.todo.entity.Todo;
@@ -39,8 +40,16 @@ public class TodoMapper {
 
 
     public TodoResponse toTodoResponse(final Todo todo) {
+
+        CategoryResponse categoryResponse = CategoryResponse.builder()
+                .id(todo.getCategory().getId())
+                .name(todo.getCategory().getName())
+                .description(todo.getCategory().getDescription())
+                .build();
+
         return TodoResponse.builder()
                            .id(todo.getId())
+                           .userId(todo.getUser().getId())
                            .title(todo.getTitle())
                            .description(todo.getDescription())
                            .startDate(todo.getStartDate())
@@ -48,6 +57,7 @@ public class TodoMapper {
                            .endDate(todo.getEndDate())
                            .endTime(todo.getEndTime())
                            .done(todo.isDone())
+                           .category(categoryResponse)
                            .build();
                 // TODO Category
 

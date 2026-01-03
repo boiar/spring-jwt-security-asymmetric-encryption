@@ -1,5 +1,6 @@
 package com.example.auth_security.todo.response;
 
+import com.example.auth_security.category.response.CategoryResponse;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 public class TodoResponse {
 
     private Long id;
+    private String userId;
     private String title;
     private String description;
     private LocalDate startDate;
@@ -21,7 +23,7 @@ public class TodoResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean done;
-    /*private CategoryResponse category;*/
+    private CategoryResponse category;
 
 
 }

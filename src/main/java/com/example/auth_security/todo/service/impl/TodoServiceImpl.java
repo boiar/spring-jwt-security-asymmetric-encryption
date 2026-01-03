@@ -34,7 +34,6 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Long createTodo(final CreateTodoRequest request, final String userId) {
 
-        System.out.println(request.getCategoryId());
         final Category category = this.categoryService.checkAndReturnCategory(request.getCategoryId(), userId);
         final User user = this.userService.getUserById(userId);
         final Todo todo = this.todoMapper.toTodoEntity(request);

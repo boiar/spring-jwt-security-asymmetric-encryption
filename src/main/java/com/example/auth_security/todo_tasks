@@ -1,5 +1,13 @@
+👉 testing unit test
+👉 testing integration test
+
+👉 create migrations files
+👉 complete roles
+👉 bean testing
+
+---------------------------------------------------
+#completed tasks
+
 ✅ ask about PreAuthorize (easy to test) ?
-1- create migrations files
-2- complete roles
-✅ send mail after register
-5- bean testing
+✅ send mail after register with rabbitMQ
+---------------------------------------------------

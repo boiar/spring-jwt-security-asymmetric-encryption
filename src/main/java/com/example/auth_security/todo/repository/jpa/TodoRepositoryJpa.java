@@ -19,7 +19,9 @@ public interface TodoRepositoryJpa extends JpaRepository<Todo, Number> {
 
     @Query("""
             SELECT t FROM Todo t
-            WHERE t.endDate >= CURRENT_DATE AND t.endTime >= CURRENT_TIME
+            WHERE t.user.id = :userId
+            AND t.endDate >= CURRENT_DATE
+            AND t.endTime >= CURRENT_TIME
             """)
     List<Todo> findAllDueTodos(String userId);
 

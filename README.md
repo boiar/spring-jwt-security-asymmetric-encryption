@@ -8,7 +8,7 @@ The application secures APIs using JSON Web Tokens (JWT) with Asymmetric Encrypt
 ## Key Features
 
 *   **Asymmetric Encryption**: RSA keys (Private/Public) for JWT signing and verification.
-*   **Role-Based Access Control (RBAC)**: Secure endpoints based on user roles (USER, ADMIN, etc.).
+*   **Event-Driven Email Notifications:** Asynchronous welcome email delivery using RabbitMQ message broker.
 *   **Token Management**: Access Token (short-lived) and Refresh Token (long-lived) implementation.
 *   **OpenAPI Documentation**: Integrated Swagger UI for API exploration.
 *   **Data Validation**: Comprehensive input validation using Jakarta Validation.
@@ -21,6 +21,7 @@ The application secures APIs using JSON Web Tokens (JWT) with Asymmetric Encrypt
 *   **Spring Boot 3.5.3**
 *   **Spring Security**
 *   **PostgreSQL**
+*   **RabbitMQ**
 *   **JJWT (Java JWT)**
 *   **Lombok**
 *   **Maven**
@@ -93,6 +94,11 @@ To generate your own keys for production:
     openssl pkcs8 -topk8 -inform PEM -in private_key.pem -out private_key_pkcs8.pem -nocrypt
     ```
 4.  Place the files in `src/main/resources/keys/` and update your `.env` path variables accordingly.
+
+
+
+
+
 
 ## API Documentation
 Once the application is running, access the interactive Swagger UI:
