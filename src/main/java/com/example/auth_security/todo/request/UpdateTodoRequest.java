@@ -2,6 +2,7 @@ package com.example.auth_security.todo.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -26,8 +27,10 @@ public class UpdateTodoRequest {
     @FutureOrPresent(message = "validation.todo.end_date.future_or_present")
     private LocalDate endDate;
 
+    @NotNull(message = "validation.todo.category.not_null")
+    private Long categoryId;
+
     private LocalTime startTime;
     private LocalTime endTime;
-    private Long categoryId;
 
 }

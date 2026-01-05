@@ -75,7 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.mailQueueProducer.enqueueRegisterMail(
                 RegisterMailDto.builder()
                         .email(user.getEmail())
-                        .username(user.getUsername())
+                        .username(user.getFullName())
                         .build()
         );
 
