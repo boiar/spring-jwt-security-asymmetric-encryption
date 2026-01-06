@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
 
-    @PostMapping("create")
+    @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(
             @RequestBody
             @Valid
