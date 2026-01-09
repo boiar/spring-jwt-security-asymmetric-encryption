@@ -115,9 +115,7 @@ public class CategoryControllerIntegrationTest {
     }
 
 
-
-
-   @Test
+    @Test
     @DisplayName("Update Category Endpoint V1 Tests")
     void shouldUpdateTodo() throws Exception {
 
@@ -150,7 +148,6 @@ public class CategoryControllerIntegrationTest {
         assertThat(updated.getDescription()).isEqualTo("Updated desc");
 
     }
-
 
 
     @Test
@@ -212,8 +209,6 @@ public class CategoryControllerIntegrationTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(2));
     }
-
-
 
 
     @Test

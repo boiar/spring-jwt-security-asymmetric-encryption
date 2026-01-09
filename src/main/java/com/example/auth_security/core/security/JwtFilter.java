@@ -29,25 +29,26 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    // skip auth public paths from jwt filter
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return isPublicPath(request);
+    }
 
     @Override
     protected void doFilterInternal(
             @NotNull
-
             final HttpServletRequest request,
             @NotNull
             final HttpServletResponse response,
             @NotNull
-            final FilterChain filterChain) throws ServletException, IOException {
+            final FilterChain filterChain
+    ) throws ServletException, IOException {
 
         final String jwt;
         final String username;
 
-        // skip auth public paths from jwt filter
-        if (isPublicPath(request)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+
 
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -118,7 +119,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private boolean isPublicPath(HttpServletRequest request) {
         AntPathMatcher matcher = new AntPathMatcher();
-        String path = request.getServletPath();
+        String path = request.getRequestURI()
+                .substring(request.getContextPath().length());
 
         for (String pattern : PUBLIC_URLS) {
             if (matcher.match(pattern, path)) {

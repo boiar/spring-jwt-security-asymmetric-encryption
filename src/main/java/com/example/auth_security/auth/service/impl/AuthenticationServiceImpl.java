@@ -21,8 +21,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 
@@ -36,13 +39,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthMapper authMapper;
     private final MailQueueProducer mailQueueProducer;
+    private  Authentication auth;
 
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        final Authentication auth = this.authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        try {
+            auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (DisabledException ex) {
+            throw new AuthException(AuthErrorCode.USER_DISABLED);
+        } catch (AuthenticationException ex) {
+            throw new AuthException(AuthErrorCode.BAD_CREDENTIALS);
+        }
 
         final User user = (User) auth.getPrincipal();
 
