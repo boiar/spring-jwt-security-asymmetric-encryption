@@ -19,7 +19,9 @@ import com.example.auth_security.todo.response.TodoResponse;
 import com.example.auth_security.todo.service.impl.TodoServiceImpl;
 import com.example.auth_security.todo.stubs.TodoRepositoryStub;
 import com.example.auth_security.user.entity.User;
+import com.example.auth_security.user.repository.UserRepository;
 import com.example.auth_security.user.service.interfaces.UserService;
+import com.example.auth_security.user.stubs.UserRepositoryStub;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -42,7 +44,9 @@ class TodoServiceImplTest {
     private CategoryService categoryService;
     @Mock
     private UserService userService;
-    private TodoRepository todoRepo; // use stub
+    private TodoRepository todoRepo; // stub
+
+    private UserRepository userRepo; // stub
     private CategoryRepository categoryRepo; // use stub
     private TodoServiceImpl todoService;
     private Category testCategory;
@@ -61,9 +65,10 @@ class TodoServiceImplTest {
         // init stubs
         todoRepo = new TodoRepositoryStub();
         categoryRepo = new CategoryRepositoryStub();
+        userRepo = new UserRepositoryStub();
 
         // inject dependencies including the stub
-        todoService = new TodoServiceImpl(todoMapper, todoRepo , categoryService, userService);
+        todoService = new TodoServiceImpl(todoMapper, todoRepo , categoryService, userService, userRepo);
 
 
         this.testUser = User.builder()
@@ -178,7 +183,7 @@ class TodoServiceImplTest {
             String userId = testUser.getId();
             when(categoryService.checkAndReturnCategory(todoCreateRequest.getCategoryId(), userId)).thenReturn(testCategory);
 
-            when(userService.getUserById(userId)).thenReturn(testTodo.getUser());
+            userRepo.save(testUser);
 
 
             Long savedId = todoService.createTodo(todoCreateRequest, userId);

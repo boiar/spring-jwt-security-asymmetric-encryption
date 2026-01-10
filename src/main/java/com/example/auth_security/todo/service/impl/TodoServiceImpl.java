@@ -13,12 +13,16 @@ import com.example.auth_security.todo.request.UpdateTodoRequest;
 import com.example.auth_security.todo.response.TodoResponse;
 import com.example.auth_security.todo.service.interfaces.TodoService;
 import com.example.auth_security.user.entity.User;
+import com.example.auth_security.user.exception.UserErrorCode;
+import com.example.auth_security.user.exception.UserException;
+import com.example.auth_security.user.repository.UserRepository;
 import com.example.auth_security.user.service.interfaces.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepo;
     private final CategoryService categoryService;
     private final UserService userService;
+    private final UserRepository userRepo;
 
 
 
@@ -35,7 +40,10 @@ public class TodoServiceImpl implements TodoService {
     public Long createTodo(final CreateTodoRequest request, final String userId) {
 
         final Category category = this.categoryService.checkAndReturnCategory(request.getCategoryId(), userId);
-        final User user = this.userService.getUserById(userId);
+        final User user = this.userRepo.findById(userId).orElseThrow (()->
+                new UserException(UserErrorCode.USER_NOT_FOUND));
+
+
         final Todo todo = this.todoMapper.toTodoEntity(request);
         todo.setCategory(category);
         todo.setUser(user);

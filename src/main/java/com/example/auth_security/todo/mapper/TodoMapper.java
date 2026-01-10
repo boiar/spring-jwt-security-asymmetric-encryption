@@ -59,7 +59,6 @@ public class TodoMapper {
                            .done(todo.isDone())
                            .category(categoryResponse)
                            .build();
-                // TODO Category
 
     }
 }
