@@ -1,8 +1,7 @@
+
+👉 CategoryTest (...., integration)
+👉 AuthTest (...., integration)
 👉 set init objs inside repos
-
-👉 inject category and user inside todoService
-
-
 👉 uee fly way for factory
 👉 create migrations files
 👉 check db when use integration test
@@ -16,9 +15,9 @@
 ✅ ask about PreAuthorize (easy to test) ?
 ✅ send mail after register with rabbitMQ
 ✅ TodoTest (unit, integration)
-✅ AuthTest (unit, integration)
-✅ CategoryTest (...., integration)
-✅ UserTest (...., integration)
 ✅ edit test structure
+✅ inject category and user inside todoService
+✅ UserTest (unit, integration)
+
 
 ---------------------------------------------------

@@ -41,7 +41,7 @@ public class UserRepositoryStub implements UserRepository {
                 .lastName("Doe")
                 .email("john.doe@example.com")
                 .phoneNumber("0123456789")
-                .password("pass")
+                .password(passwordEncoder.encode("pass"))
                 .dateOfBirth(LocalDate.of(1990, 1, 1))
                 .enabled(true)
                 .timingData(new EntityAuditTimingData())
