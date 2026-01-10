@@ -7,13 +7,12 @@ import java.util.Optional;
 
 public interface UserRepository {
     boolean existsByEmailIgnoreCase(String email);
+
     boolean existsByPhoneNumber(String phoneNumber);
 
     Optional<User> findByEmailIgnoreCase(String email);
 
-
     Optional<User> findById(String userId);
 
     void save(User userObj);
-
 }

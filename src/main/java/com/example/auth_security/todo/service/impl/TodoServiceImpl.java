@@ -3,6 +3,8 @@ package com.example.auth_security.todo.service.impl;
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.repository.CategoryRepository;
 import com.example.auth_security.category.service.interfaces.CategoryService;
+import com.example.auth_security.common.exception.CommonErrorCode;
+import com.example.auth_security.common.exception.CommonException;
 import com.example.auth_security.todo.entity.Todo;
 import com.example.auth_security.todo.exception.TodoErrorCode;
 import com.example.auth_security.todo.exception.TodoException;
@@ -30,7 +32,7 @@ public class TodoServiceImpl implements TodoService {
 
     private final TodoMapper todoMapper;
     private final TodoRepository todoRepo;
-    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepo;
     private final UserService userService;
     private final UserRepository userRepo;
 
@@ -39,7 +41,12 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Long createTodo(final CreateTodoRequest request, final String userId) {
 
-        final Category category = this.categoryService.checkAndReturnCategory(request.getCategoryId(), userId);
+        final Category category = this.categoryRepo.findByIdForUser(request.getCategoryId(), userId)
+                                        .orElseThrow(() ->
+                                                new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION)
+                                        );
+
+
         final User user = this.userRepo.findById(userId).orElseThrow (()->
                 new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -54,10 +61,12 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void updateTodo(final UpdateTodoRequest request, Long todoId, final String userId) {
 
-        final Todo todoToUpdate = this.todoRepo.findById(todoId).orElseThrow (()->
-                                                        new TodoException(TodoErrorCode.TODO_NOT_EXISTS));
+        final Todo todoToUpdate = this.todoRepo.findById(todoId).orElseThrow (()-> new TodoException(TodoErrorCode.TODO_NOT_EXISTS));
 
-        final Category category = this.categoryService.checkAndReturnCategory(request.getCategoryId(), userId);
+        final Category category = this.categoryRepo.findByIdForUser(request.getCategoryId(), userId)
+                                        .orElseThrow(() ->
+                                                new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION)
+                                        );
 
         this.todoMapper.mergerTodoEntity(todoToUpdate, request);
         todoToUpdate.setCategory(category);

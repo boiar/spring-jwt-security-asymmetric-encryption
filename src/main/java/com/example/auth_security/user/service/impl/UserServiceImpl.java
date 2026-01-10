@@ -31,6 +31,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public UserDetails loadUserByEmail(String email) {
+        return loadUserByUsername(email);
+    }
+
+
+    @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         return this.userRepo.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found !"));
@@ -105,7 +111,7 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.findById(userId)
                           .map(this.userMapper::toUserProfileResponse)
                                 .orElseThrow(() ->
-                                        new TodoException(TodoErrorCode.TODO_NOT_EXISTS));
+                                        new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 
 

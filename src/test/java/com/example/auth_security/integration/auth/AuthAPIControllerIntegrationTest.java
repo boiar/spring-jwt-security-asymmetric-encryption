@@ -1,4 +1,4 @@
-package com.example.auth_security.auth.integration;
+package com.example.auth_security.integration.auth;
 
 import com.example.auth_security.auth.request.LoginRequest;
 import com.example.auth_security.auth.request.RegisterRequest;

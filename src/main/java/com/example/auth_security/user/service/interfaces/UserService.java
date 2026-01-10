@@ -4,6 +4,7 @@ import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.request.ChangePasswordRequest;
 import com.example.auth_security.user.request.ProfileUpdateRequest;
 import com.example.auth_security.user.response.UserProfileResponse;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 
@@ -16,6 +17,8 @@ public interface UserService extends UserDetailsService {
     void deleteAccount(String userId);
 
     UserProfileResponse getUserById(String userId);
+
+     UserDetails loadUserByEmail(String email);
 
 
 }

@@ -9,7 +9,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @Getter
 public enum UserErrorCode {
-
     EMAIL_ALREADY_EXISTS("ERR_EMAIL_EXISTS", CONFLICT),
     PHONE_ALREADY_EXISTS("ERR_PHONE_EXISTS", CONFLICT),
     PASSWORD_MISMATCH("ERR_PASSWORD_MISMATCH", BAD_REQUEST),
@@ -18,9 +17,6 @@ public enum UserErrorCode {
     ACCOUNT_ALREADY_ACTIVATED("ERR_ACCOUNT_ALREADY_ACTIVATED", BAD_REQUEST),
     INVALID_CURRENT_PASSWORD("ERR_INVALID_CURRENT_PASSWORD", BAD_REQUEST),
     CHANGE_PASSWORD_MISMATCH("ERR_CHANGE_PASSWORD_MISMATCH",BAD_REQUEST);
-
-
-
 
     private final String code;
     private final HttpStatus status;
@@ -37,6 +33,4 @@ public enum UserErrorCode {
     public String getMessage(MessageSource messageSource, Object[] args) {
         return messageSource.getMessage(this.code, args, this.code, LocaleContextHolder.getLocale());
     }
-
-
 }

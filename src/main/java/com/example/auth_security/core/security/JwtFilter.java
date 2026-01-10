@@ -49,14 +49,11 @@ public class JwtFilter extends OncePerRequestFilter {
         final String username;
 
 
-
-
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             sendError(response, "unauthorized", "Authorization header missing");
             return;
         }
-
 
 
         jwt = authHeader.substring(7);

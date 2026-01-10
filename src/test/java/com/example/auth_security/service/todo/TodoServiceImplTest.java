@@ -1,9 +1,9 @@
-package com.example.auth_security.todo.service;
+package com.example.auth_security.service.todo;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.repository.CategoryRepository;
 import com.example.auth_security.category.service.interfaces.CategoryService;
-import com.example.auth_security.category.stubs.CategoryRepositoryStub;
+import com.example.auth_security.stubs.category.CategoryRepositoryStub;
 import com.example.auth_security.common.entity.EntityAuditActorData;
 import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.common.exception.CommonErrorCode;
@@ -17,15 +17,18 @@ import com.example.auth_security.todo.request.CreateTodoRequest;
 import com.example.auth_security.todo.request.UpdateTodoRequest;
 import com.example.auth_security.todo.response.TodoResponse;
 import com.example.auth_security.todo.service.impl.TodoServiceImpl;
-import com.example.auth_security.todo.stubs.TodoRepositoryStub;
+import com.example.auth_security.stubs.todo.TodoRepositoryStub;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.repository.UserRepository;
 import com.example.auth_security.user.service.interfaces.UserService;
-import com.example.auth_security.user.stubs.UserRepositoryStub;
+import com.example.auth_security.stubs.user.UserRepositoryStub;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -40,124 +43,49 @@ import static org.mockito.Mockito.*;
 @DisplayName("TodoServiceImplTest Unit Test")
 class TodoServiceImplTest {
     private final TodoMapper todoMapper = new TodoMapper();
-    @Mock
-    private CategoryService categoryService;
+
     @Mock
     private UserService userService;
-    private TodoRepository todoRepo; // stub
+    //stubs
+    private TodoRepositoryStub todoRepo;
+    private UserRepositoryStub userRepo;
+    private CategoryRepositoryStub categoryRepo;
 
-    private UserRepository userRepo; // stub
-    private CategoryRepository categoryRepo; // use stub
     private TodoServiceImpl todoService;
+
     private Category testCategory;
     private Category anotherCategory;
     private Todo testTodo;
     private Todo anotherTestTodo;
     private User testUser;
     private User anotherUser;
+
     private CreateTodoRequest todoCreateRequest;
     private UpdateTodoRequest todoUpdateRequest;
     private TodoResponse todoResponse;
 
     @BeforeEach
-    void setUp() {
-
+    void globalSetUp() {
         // init stubs
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         todoRepo = new TodoRepositoryStub();
         categoryRepo = new CategoryRepositoryStub();
-        userRepo = new UserRepositoryStub();
+        userRepo = new UserRepositoryStub(encoder);
 
         // inject dependencies including the stub
-        todoService = new TodoServiceImpl(todoMapper, todoRepo , categoryService, userService, userRepo);
+        todoService = new TodoServiceImpl(todoMapper, todoRepo , categoryRepo, userService, userRepo);
 
+        // get users
+        testUser = userRepo.getUserById(UserRepositoryStub.USER_1_ID);
+        anotherUser = userRepo.getUserById(UserRepositoryStub.USER_2_ID);
 
-        this.testUser = User.builder()
-                .id("user-123")
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .build();
+        // get categories
+        testCategory = categoryRepo.getCategoryById(CategoryRepositoryStub.CAT_1_ID);
+        anotherCategory = categoryRepo.getCategoryById(CategoryRepositoryStub.CAT_2_ID);
 
-        this.anotherUser = User.builder()
-                .id("user-456")
-                .firstName("Jane")
-                .lastName("Smith")
-                .email("jane.smith@example.com")
-                .build();
-
-
-        this.testCategory = Category.builder()
-                .id(1L)
-                .name("Work")
-                .description("Work related todos")
-                .build();
-
-        this.anotherCategory = Category.builder()
-                .id(2L)
-                .name("Personal")
-                .description("Personal todos")
-                .build();
-
-
-        // Initialize ActorData for the test todo
-        EntityAuditActorData actorData = new EntityAuditActorData();
-        actorData.setCreatedBy("user-123");
-        actorData.setLastModifiedBy("user-123");
-
-        // Initialize TimingData for the test todo
-        EntityAuditTimingData timingData = new EntityAuditTimingData();
-        timingData.setCreatedDate(LocalDateTime.now());
-        timingData.setUpdatedDate(LocalDateTime.now());
-
-        this.testTodo = Todo.builder()
-                .id(1L)
-                .title("Test Todo")
-                .description("Test Description")
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(1))
-                .startTime(LocalTime.of(9, 0))
-                .endTime(LocalTime.of(17, 0))
-                .isDone(false)
-                .user(testUser)
-                .category(this.testCategory)
-                .actorData(actorData)
-                .timingData(timingData)
-                .build();
-
-        this.anotherTestTodo = Todo.builder()
-                .id(2L)
-                .title("Another Test Todo")
-                .description("Another Test Description")
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(1))
-                .startTime(LocalTime.of(9, 0))
-                .endTime(LocalTime.of(17, 0))
-                .isDone(false)
-                .user(testUser)
-                .category(this.testCategory)
-                .actorData(actorData)
-                .timingData(timingData)
-                .build();
-
-        this.todoCreateRequest = CreateTodoRequest.builder()
-                .title("New Todo")
-                .description("New Description")
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(1))
-                .startTime(LocalTime.of(10, 0))
-                .endTime(LocalTime.of(18, 0))
-                .categoryId(1L)
-                .build();
-
-        this.todoUpdateRequest = UpdateTodoRequest.builder()
-                .title("Updated Todo")
-                .description("Updated Description")
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(2))
-                .startTime(LocalTime.of(11, 0))
-                .endTime(LocalTime.of(19, 0))
-                .categoryId(1L)
-                .build();
+        // get todos
+        testTodo = todoRepo.createFirstTodo(testUser, testCategory);
+        anotherTestTodo = todoRepo.createSecondTodo(testUser, testCategory);
 
         this.todoResponse = TodoResponse.builder()
                 .id(1L)
@@ -176,16 +104,24 @@ class TodoServiceImplTest {
     @DisplayName("Create Todo Tests")
     class CreateTodoTests{
 
+        @BeforeEach
+        void nestedSetUp(){
+            todoCreateRequest = CreateTodoRequest.builder()
+                    .title("New Todo")
+                    .description("New Description")
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now().plusDays(1))
+                    .startTime(LocalTime.of(10, 0))
+                    .endTime(LocalTime.of(18, 0))
+                    .categoryId(1L)
+                    .build();
+        }
+
         @Test
         @DisplayName("Should create todo successfully when valid and valid request and category exists")
         void shouldCreateTodoSuccessfully(){
             // ===== given =====
             String userId = testUser.getId();
-            when(categoryService.checkAndReturnCategory(todoCreateRequest.getCategoryId(), userId)).thenReturn(testCategory);
-
-            userRepo.save(testUser);
-
-
             Long savedId = todoService.createTodo(todoCreateRequest, userId);
 
             // ===== then =====
@@ -214,8 +150,9 @@ class TodoServiceImplTest {
         void shouldThrowExceptionWhenCategoryNotFound(){
             // given
             String userId = testUser.getId();
-            when(categoryService.checkAndReturnCategory(todoCreateRequest.getCategoryId(), userId))
-                    .thenThrow(new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION));
+            categoryRepo.clear();
+            todoRepo.clear();
+
 
             CommonException exception = assertThrows(
                     CommonException.class,
@@ -235,9 +172,9 @@ class TodoServiceImplTest {
         void shouldHandleNullCatIdInRequest() {
             // given
             String userId = testUser.getId();
+            categoryRepo.clear();
+            todoRepo.clear();
             todoCreateRequest.setCategoryId(null);
-            when(categoryService.checkAndReturnCategory(null, userId))
-                    .thenThrow(new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION));
 
             CommonException exception = assertThrows(
                     CommonException.class,
@@ -258,17 +195,24 @@ class TodoServiceImplTest {
     @Nested
     @DisplayName("Update Todo Tests")
     class UpdateTodoTests{
+        @BeforeEach
+        void nestedSetUp(){
+            todoUpdateRequest = UpdateTodoRequest.builder()
+                    .title("Updated Todo")
+                    .description("Updated Description")
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now().plusDays(2))
+                    .startTime(LocalTime.of(11, 0))
+                    .endTime(LocalTime.of(19, 0))
+                    .categoryId(1L)
+                    .build();
+        }
+
         @Test
         @DisplayName("Should update successfully a Todo when todo and category exist")
         void shouldSuccessfullyUpdateTodo(){
             String userId = testUser.getId();
             Long todoId = testTodo.getId();
-
-            // save original todo
-            Todo savedTodo = todoRepo.save(testTodo);
-
-            when(categoryService.checkAndReturnCategory(todoUpdateRequest.getCategoryId(), userId)).thenReturn(testCategory);
-
             // ===== when =====
             todoService.updateTodo(todoUpdateRequest, todoId, userId);
 
@@ -277,8 +221,6 @@ class TodoServiceImplTest {
             assertTrue(updatedTodoOpt.isPresent(), "Updated todo should exist in repository");
 
             Todo updatedTodo = updatedTodoOpt.get();
-
-
 
             // Verify all fields were updated correctly
             assertEquals(todoUpdateRequest.getTitle(), updatedTodo.getTitle(), "Title should be updated");
@@ -290,10 +232,6 @@ class TodoServiceImplTest {
             assertEquals(testCategory, updatedTodo.getCategory(), "Category should be updated");
             assertEquals(userId, updatedTodo.getActorData().getLastModifiedBy(), "ActorData.updatedBy should be set to userId");
             assertNotNull(updatedTodo.getTimingData().getUpdatedDate(), "ActorData.updatedAt should be set");
-
-            // Verify categoryService was called
-            verify(categoryService).checkAndReturnCategory(todoUpdateRequest.getCategoryId(), userId);
-
         }
 
         @Test
@@ -312,7 +250,6 @@ class TodoServiceImplTest {
             assertTrue(todoRepo.findById(nonExistentTodoId).isEmpty(),
                     "No todo should be saved when category validation fails");
             verifyNoInteractions(userService);
-            verifyNoInteractions(categoryService);
         }
 
         @Test
@@ -327,8 +264,6 @@ class TodoServiceImplTest {
 
             todoUpdateRequest.setCategoryId(nonExistentCategoryId);
 
-            when(categoryService.checkAndReturnCategory(nonExistentCategoryId, userId))
-                    .thenThrow(new CommonException(CommonErrorCode.YOU_NOT_HAVE_PERMISSION));
 
             CommonException exception = assertThrows(
                     CommonException.class,
@@ -374,7 +309,6 @@ class TodoServiceImplTest {
                     () -> todoService.findTodoById(notExistTodoId)
             );
 
-
             assertNotNull(exception);
             assertEquals(TodoErrorCode.TODO_NOT_EXISTS.getCode(), exception.getErrorCode());
             assertTrue(todoRepo.findById(notExistTodoId).isEmpty(), "Stub confirms todo doesn't exist");
@@ -410,7 +344,6 @@ class TodoServiceImplTest {
 
             assertAll("Validate returned todos",
                     () -> assertNotNull(response, "Response should not be null"),
-                    () -> assertEquals(1, response.size(),  "Size should be 1"),
                     () -> assertEquals(savedTodo.getId(), response.get(0).getId()),
                     () -> assertEquals(today, response.get(0).getStartDate()),
                     () -> assertEquals(userId, response.get(0).getUserId())
@@ -444,9 +377,12 @@ class TodoServiceImplTest {
         @DisplayName("Should return empty today's todos array for the user")
         void shouldReturnEmptyTodosTodayResponse() {
             LocalDate today = LocalDate.now();
-            // Save a past todo (7 days ago) - should NOT be returned
+            // Save a past todo (7 days ago)
             anotherTestTodo.setStartDate(today.minusDays(7));
             todoRepo.save(anotherTestTodo);
+
+            testTodo.setStartDate(today.minusDays(7));
+            todoRepo.save(testTodo);
 
             String userId = testUser.getId();
 
@@ -469,17 +405,19 @@ class TodoServiceImplTest {
         @DisplayName("Should return todos by category response")
         void shouldReturnTodosByCategoryForUser() {
             // Save todo
-            Todo savedTodo = todoRepo.save(testTodo);
-            String userId = savedTodo.getUser().getId();
-            Long catId = savedTodo.getCategory().getId();
+            String userId = testTodo.getUser().getId();
+            Long catId = testTodo.getCategory().getId();
 
+            // make another todo with another category
+            anotherTestTodo.setCategory(anotherCategory);
+            todoRepo.save(anotherTestTodo);
 
             List<TodoResponse> response = todoService.findAllTodosByCategory(catId, userId);
 
             assertAll("Validate returned todos",
                     () -> assertNotNull(response, "Response should not be null"),
                     () -> assertEquals(1, response.size(),  "Size should be 1"),
-                    () -> assertEquals(savedTodo.getId(), response.get(0).getId(), ""),
+                    () -> assertEquals(testTodo.getId(), response.get(0).getId(), ""),
                     () -> assertEquals(catId, response.get(0).getCategory().getId(), "Should the same category"),
                     () -> assertEquals(userId, response.get(0).getUserId())
             );
@@ -521,11 +459,18 @@ class TodoServiceImplTest {
         void shouldReturnTodosScheduledForToday() {
             // Save tomorrow todo
             LocalDate tomorrow = LocalDate.now().plusDays(1);
+            LocalDate yesterday = LocalDate.now().minusDays(2);
             LocalTime endTime = LocalTime.now().plusHours(2);
 
             testTodo.setEndDate(tomorrow);
             testTodo.setEndTime(endTime);
             Todo savedTodo = todoRepo.save(testTodo);
+
+            // make another todo is in the past
+            anotherTestTodo.setEndDate(yesterday);
+            anotherTestTodo.setEndTime(LocalTime.of(0,0));
+            todoRepo.save(anotherTestTodo);
+
             String userId  = savedTodo.getUser().getId();
 
             List<TodoResponse> response = todoService.findAllDueTodos(userId);

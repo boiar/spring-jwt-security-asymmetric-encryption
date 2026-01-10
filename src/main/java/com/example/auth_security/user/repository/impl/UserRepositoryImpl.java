@@ -13,6 +13,7 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserRepositoryJpa userRepositoryJpa;
+
     @Override
     public boolean existsByEmailIgnoreCase(String email) {
         return this.userRepositoryJpa.existsByEmailIgnoreCase(email);

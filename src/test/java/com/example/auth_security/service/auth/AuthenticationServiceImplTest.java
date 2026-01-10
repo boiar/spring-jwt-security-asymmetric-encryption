@@ -1,4 +1,4 @@
-package com.example.auth_security.auth.service;
+package com.example.auth_security.service.auth;
 
 public class AuthenticationServiceImplTest {
 

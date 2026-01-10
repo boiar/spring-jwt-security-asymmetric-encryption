@@ -1,4 +1,4 @@
-package com.example.auth_security.todo.integration;
+package com.example.auth_security.integration.todo;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.repository.CategoryRepository;

@@ -1,4 +1,4 @@
-package com.example.auth_security.user.integration;
+package com.example.auth_security.integration.user;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.repository.CategoryRepository;
