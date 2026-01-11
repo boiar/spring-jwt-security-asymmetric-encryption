@@ -48,7 +48,6 @@ class TodoServiceImplTest {
     private UserService userService;
     //stubs
     private TodoRepositoryStub todoRepo;
-    private UserRepositoryStub userRepo;
     private CategoryRepositoryStub categoryRepo;
 
     private TodoServiceImpl todoService;
@@ -58,11 +57,9 @@ class TodoServiceImplTest {
     private Todo testTodo;
     private Todo anotherTestTodo;
     private User testUser;
-    private User anotherUser;
 
     private CreateTodoRequest todoCreateRequest;
     private UpdateTodoRequest todoUpdateRequest;
-    private TodoResponse todoResponse;
 
     @BeforeEach
     void globalSetUp() {
@@ -70,14 +67,14 @@ class TodoServiceImplTest {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         todoRepo = new TodoRepositoryStub();
         categoryRepo = new CategoryRepositoryStub();
-        userRepo = new UserRepositoryStub(encoder);
+        UserRepositoryStub userRepo = new UserRepositoryStub(encoder);
 
         // inject dependencies including the stub
         todoService = new TodoServiceImpl(todoMapper, todoRepo , categoryRepo, userService, userRepo);
 
         // get users
         testUser = userRepo.getUserById(UserRepositoryStub.USER_1_ID);
-        anotherUser = userRepo.getUserById(UserRepositoryStub.USER_2_ID);
+        User anotherUser = userRepo.getUserById(UserRepositoryStub.USER_2_ID);
 
         // get categories
         testCategory = categoryRepo.getCategoryById(CategoryRepositoryStub.CAT_1_ID);
@@ -87,7 +84,7 @@ class TodoServiceImplTest {
         testTodo = todoRepo.createFirstTodo(testUser, testCategory);
         anotherTestTodo = todoRepo.createSecondTodo(testUser, testCategory);
 
-        this.todoResponse = TodoResponse.builder()
+        TodoResponse todoResponse = TodoResponse.builder()
                 .id(1L)
                 .title("Test todo")
                 .description("Test Description")

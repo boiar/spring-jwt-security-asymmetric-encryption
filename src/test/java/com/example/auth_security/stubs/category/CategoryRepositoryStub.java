@@ -100,4 +100,6 @@ public class CategoryRepositoryStub implements CategoryRepository {
     public int count() {
         return store.size();
     }
+
+
 }

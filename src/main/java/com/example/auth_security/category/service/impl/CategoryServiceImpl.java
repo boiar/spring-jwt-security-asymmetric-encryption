@@ -58,6 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse findByCategoryId(Long catId) {
+
         return categoryRepo.findById(catId)
                            .map(this.categoryMapper::toCategoryResponse)
                            .orElseThrow(() ->
@@ -66,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    private void checkCategoryExistsForUser(final String catName, final String userId) {
+    public void checkCategoryExistsForUser(final String catName, final String userId) {
         final boolean alreadyExistsForUser = this.categoryRepo.existsByNameForUser(catName, userId);
         if (alreadyExistsForUser) {
             throw new CategoryException(CategoryErrorCode.CATEGORY_ALREADY_EXISTS_FOR_USER);

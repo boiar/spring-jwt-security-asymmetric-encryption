@@ -2,6 +2,7 @@
 👉 CategoryTest (...., integration)
 👉 AuthTest (...., integration)
 👉 set init objs inside repos
+
 👉 uee fly way for factory
 👉 create migrations files
 👉 check db when use integration test
