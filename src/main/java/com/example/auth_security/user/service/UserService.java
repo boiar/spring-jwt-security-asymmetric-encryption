@@ -1,4 +1,4 @@
-package com.example.auth_security.user.service.interfaces;
+package com.example.auth_security.user.service;
 
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.request.ChangePasswordRequest;

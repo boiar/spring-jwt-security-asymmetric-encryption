@@ -4,7 +4,7 @@ import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.request.ChangePasswordRequest;
 import com.example.auth_security.user.request.ProfileUpdateRequest;
 import com.example.auth_security.user.response.UserProfileResponse;
-import com.example.auth_security.user.service.interfaces.UserService;
+import com.example.auth_security.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

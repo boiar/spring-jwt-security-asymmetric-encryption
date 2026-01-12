@@ -2,7 +2,6 @@ package com.example.auth_security.todo.service.impl;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.repository.CategoryRepository;
-import com.example.auth_security.category.service.interfaces.CategoryService;
 import com.example.auth_security.common.exception.CommonErrorCode;
 import com.example.auth_security.common.exception.CommonException;
 import com.example.auth_security.todo.entity.Todo;
@@ -13,18 +12,16 @@ import com.example.auth_security.todo.repository.TodoRepository;
 import com.example.auth_security.todo.request.CreateTodoRequest;
 import com.example.auth_security.todo.request.UpdateTodoRequest;
 import com.example.auth_security.todo.response.TodoResponse;
-import com.example.auth_security.todo.service.interfaces.TodoService;
+import com.example.auth_security.todo.service.TodoService;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.exception.UserErrorCode;
 import com.example.auth_security.user.exception.UserException;
 import com.example.auth_security.user.repository.UserRepository;
-import com.example.auth_security.user.service.interfaces.UserService;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.auth_security.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

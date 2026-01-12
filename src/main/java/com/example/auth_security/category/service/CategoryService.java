@@ -1,4 +1,4 @@
-package com.example.auth_security.category.service.interfaces;
+package com.example.auth_security.category.service;
 
 import com.example.auth_security.category.entity.Category;
 import com.example.auth_security.category.request.CreateCategoryRequest;

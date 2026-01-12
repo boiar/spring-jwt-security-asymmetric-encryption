@@ -1,11 +1,8 @@
 
-👉 CategoryTest (...., integration)
-👉 AuthTest (...., integration)
-👉 set init objs inside repos
-
 👉 uee fly way for factory
 👉 create migrations files
 👉 check db when use integration test
+👉 check validation password
 👉 bean testing
 👉 css fixer (style code)
 👉 complete roles
@@ -19,6 +16,8 @@
 ✅ edit test structure
 ✅ inject category and user inside todoService
 ✅ UserTest (unit, integration)
-
+✅ CategoryTest (unit, integration)
+✅ AuthTest (unit, integration)
 
 ---------------------------------------------------
+

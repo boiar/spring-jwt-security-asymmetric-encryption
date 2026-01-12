@@ -19,7 +19,8 @@ public enum AuthErrorCode {
     PHONE_ALREADY_EXISTS("err.phone.already_exists", BAD_REQUEST),
     EMAIL_ALREADY_EXISTS("err.email.already_exists", BAD_REQUEST),
     CHANGE_PASSWORD_MISMATCH("err.change_password_mismatch", BAD_REQUEST),
-    USERNAME_NOT_FOUND("err.username_not_found", NOT_FOUND);
+    USERNAME_NOT_FOUND("err.username_not_found", NOT_FOUND),
+    INVALID_REFRESH_TOKEN("err.refresh_token.invalid", BAD_REQUEST);
 
 
     private final String code;

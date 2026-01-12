@@ -80,7 +80,6 @@ public class AuthAPIControllerIntegrationTest {
 
         userRepo.save(testUser);
         this.accessToken = this.jwtService.generateAccessToken(testUser.getUsername());
-
     }
 
 
@@ -94,8 +93,6 @@ public class AuthAPIControllerIntegrationTest {
             LoginRequest request = new LoginRequest();
             request.setEmail("test@example.com");
             request.setPassword("pass");
-
-
             // When & Then
             MvcResult result = mockMvc.perform(post("/api/v1/auth/login")
                             .contentType(MediaType.APPLICATION_JSON)

@@ -11,35 +11,19 @@ import com.example.auth_security.category.service.impl.CategoryServiceImpl;
 import com.example.auth_security.common.exception.CommonErrorCode;
 import com.example.auth_security.common.exception.CommonException;
 import com.example.auth_security.stubs.category.CategoryRepositoryStub;
-import com.example.auth_security.stubs.todo.TodoRepositoryStub;
 import com.example.auth_security.stubs.user.UserRepositoryStub;
-import com.example.auth_security.todo.entity.Todo;
-import com.example.auth_security.todo.exception.TodoErrorCode;
-import com.example.auth_security.todo.exception.TodoException;
-import com.example.auth_security.todo.mapper.TodoMapper;
-import com.example.auth_security.todo.request.CreateTodoRequest;
-import com.example.auth_security.todo.request.UpdateTodoRequest;
-import com.example.auth_security.todo.response.TodoResponse;
-import com.example.auth_security.todo.service.impl.TodoServiceImpl;
 import com.example.auth_security.user.entity.User;
-import com.example.auth_security.user.service.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -47,17 +31,14 @@ import static org.mockito.Mockito.verifyNoInteractions;
 class CategoryServiceImplTest {
     private final CategoryMapper categoryMapper = new CategoryMapper();
 
-    @Mock
-    private UserService userService;
+
     //stubs
     private CategoryRepositoryStub categoryRepo;
 
     private CategoryServiceImpl categoryService;
 
     private Category testCategory;
-    private Category anotherCategory;
     private User testUser;
-    private User anotherUser;
 
     private CreateCategoryRequest createCategoryRequest;
     private UpdateCategoryRequest updateCategoryRequest;
@@ -79,21 +60,6 @@ class CategoryServiceImplTest {
 
         // get categories
         testCategory = categoryRepo.getCategoryById(CategoryRepositoryStub.CAT_1_ID);
-        anotherCategory = categoryRepo.getCategoryById(CategoryRepositoryStub.CAT_2_ID);
-
-
-
-        CategoryResponse categoryResponse1 = CategoryResponse.builder()
-                .id(1L)
-                .name("Work")
-                .description("Work todos")
-                .build();
-
-        CategoryResponse categoryResponse2 = CategoryResponse.builder()
-                .id(2L)
-                .name("Personal")
-                .description("Personal todos")
-                .build();
     }
 
 

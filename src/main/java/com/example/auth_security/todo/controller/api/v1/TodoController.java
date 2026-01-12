@@ -5,7 +5,7 @@ import com.example.auth_security.todo.request.CreateTodoRequest;
 import com.example.auth_security.todo.request.UpdateTodoRequest;
 import com.example.auth_security.todo.response.CreateTodoResponse;
 import com.example.auth_security.todo.response.TodoResponse;
-import com.example.auth_security.todo.service.interfaces.TodoService;
+import com.example.auth_security.todo.service.TodoService;
 import com.example.auth_security.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

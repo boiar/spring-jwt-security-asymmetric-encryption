@@ -1,19 +1,15 @@
 package com.example.auth_security.user.service.impl;
 
-import com.example.auth_security.todo.exception.TodoErrorCode;
-import com.example.auth_security.todo.exception.TodoException;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.exception.UserErrorCode;
 import com.example.auth_security.user.exception.UserException;
 import com.example.auth_security.user.mapper.UserMapper;
 import com.example.auth_security.user.repository.UserRepository;
 import com.example.auth_security.user.response.UserProfileResponse;
-import com.example.auth_security.user.service.interfaces.UserService;
+import com.example.auth_security.user.service.UserService;
 import com.example.auth_security.user.request.ChangePasswordRequest;
 import com.example.auth_security.user.request.ProfileUpdateRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

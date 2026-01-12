@@ -1,26 +1,20 @@
 package com.example.auth_security.service.todo;
 
 import com.example.auth_security.category.entity.Category;
-import com.example.auth_security.category.repository.CategoryRepository;
-import com.example.auth_security.category.service.interfaces.CategoryService;
 import com.example.auth_security.stubs.category.CategoryRepositoryStub;
-import com.example.auth_security.common.entity.EntityAuditActorData;
-import com.example.auth_security.common.entity.EntityAuditTimingData;
 import com.example.auth_security.common.exception.CommonErrorCode;
 import com.example.auth_security.common.exception.CommonException;
 import com.example.auth_security.todo.entity.Todo;
 import com.example.auth_security.todo.exception.TodoErrorCode;
 import com.example.auth_security.todo.exception.TodoException;
 import com.example.auth_security.todo.mapper.TodoMapper;
-import com.example.auth_security.todo.repository.TodoRepository;
 import com.example.auth_security.todo.request.CreateTodoRequest;
 import com.example.auth_security.todo.request.UpdateTodoRequest;
 import com.example.auth_security.todo.response.TodoResponse;
 import com.example.auth_security.todo.service.impl.TodoServiceImpl;
 import com.example.auth_security.stubs.todo.TodoRepositoryStub;
 import com.example.auth_security.user.entity.User;
-import com.example.auth_security.user.repository.UserRepository;
-import com.example.auth_security.user.service.interfaces.UserService;
+import com.example.auth_security.user.service.UserService;
 import com.example.auth_security.stubs.user.UserRepositoryStub;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;

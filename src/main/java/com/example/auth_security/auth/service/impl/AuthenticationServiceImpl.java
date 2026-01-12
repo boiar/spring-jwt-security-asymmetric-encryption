@@ -6,13 +6,12 @@ import com.example.auth_security.auth.mapper.AuthMapper;
 import com.example.auth_security.auth.request.RegisterRequest;
 import com.example.auth_security.auth.response.RefreshTokenResponse;
 import com.example.auth_security.auth.response.RegisterResponse;
-import com.example.auth_security.auth.service.interfaces.AuthenticationService;
+import com.example.auth_security.auth.service.AuthenticationService;
 import com.example.auth_security.auth.request.LoginRequest;
 import com.example.auth_security.auth.request.RefreshRequest;
 import com.example.auth_security.auth.response.LoginResponse;
 import com.example.auth_security.common.mail.dto.RegisterMailDto;
 import com.example.auth_security.common.mail.producer.MailQueueProducer;
-import com.example.auth_security.common.mail.service.interfaces.MailService;
 import com.example.auth_security.core.security.JwtService;
 import com.example.auth_security.user.entity.User;
 import com.example.auth_security.user.repository.UserRepository;
@@ -21,7 +20,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -100,6 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public RefreshTokenResponse refreshToken(RefreshRequest req) {
+
         final String newAccessToken = this.jwtService.refreshAccessToken(req.getRefreshToken());
         final String tokenType = "Bearer";
         return authMapper.toRefreshTokenResponse(newAccessToken, tokenType);
@@ -127,7 +126,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AuthException(AuthErrorCode.PHONE_ALREADY_EXISTS);
         }
     }
-
 
 }
 

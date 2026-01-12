@@ -3,7 +3,7 @@ package com.example.auth_security.category.controller.api.v1;
 import com.example.auth_security.category.request.CreateCategoryRequest;
 import com.example.auth_security.category.request.UpdateCategoryRequest;
 import com.example.auth_security.category.response.CategoryResponse;
-import com.example.auth_security.category.service.interfaces.CategoryService;
+import com.example.auth_security.category.service.CategoryService;
 import com.example.auth_security.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

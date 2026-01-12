@@ -8,16 +8,14 @@ import com.example.auth_security.category.repository.CategoryRepository;
 import com.example.auth_security.category.request.CreateCategoryRequest;
 import com.example.auth_security.category.request.UpdateCategoryRequest;
 import com.example.auth_security.category.response.CategoryResponse;
-import com.example.auth_security.category.service.interfaces.CategoryService;
+import com.example.auth_security.category.service.CategoryService;
 import com.example.auth_security.common.exception.CommonErrorCode;
 import com.example.auth_security.common.exception.CommonException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

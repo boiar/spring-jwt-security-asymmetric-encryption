@@ -1,4 +1,4 @@
-package com.example.auth_security.todo.service.interfaces;
+package com.example.auth_security.todo.service;
 
 import com.example.auth_security.todo.request.CreateTodoRequest;
 import com.example.auth_security.todo.request.UpdateTodoRequest;

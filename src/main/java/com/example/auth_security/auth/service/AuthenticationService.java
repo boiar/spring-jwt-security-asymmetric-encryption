@@ -1,4 +1,4 @@
-package com.example.auth_security.auth.service.interfaces;
+package com.example.auth_security.auth.service;
 
 import com.example.auth_security.auth.request.LoginRequest;
 import com.example.auth_security.auth.request.RefreshRequest;
