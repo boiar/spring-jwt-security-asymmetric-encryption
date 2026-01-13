@@ -1,6 +1,8 @@
 # HMVC TODO App 
 ## JWT Security with Asymmetric Encryption (RSA)
 
+![HMVC_TODO_APP](./project.png)
+
 This project demonstrates a robust, production-ready authentication and authorization system built with Spring Boot 3.5.3, following an HMVC (Hierarchical Model–View–Controller) architecture.
 
 The application secures APIs using JSON Web Tokens (JWT) with Asymmetric Encryption (RSA), providing a higher security level compared to traditional symmetric (shared-secret) JWT implementations.
@@ -8,24 +10,31 @@ The application secures APIs using JSON Web Tokens (JWT) with Asymmetric Encrypt
 ## Key Features
 
 *   **Asymmetric Encryption**: RSA keys (Private/Public) for JWT signing and verification.
-*   **Event-Driven Email Notifications:** Asynchronous welcome email delivery using RabbitMQ message broker.
+*   **Dual Token System**: Short-lived Access Tokens and long-lived Refresh Tokens.
+*   **HMVC Pattern**:  Hierarchical Model-View-Controller for modular, scalable codebase.
+*   **Event-Driven Email Notifications**: Asynchronous welcome email delivery using RabbitMQ message broker.
 *   **Token Management**: Access Token (short-lived) and Refresh Token (long-lived) implementation.
 *   **OpenAPI Documentation**: Integrated Swagger UI for API exploration.
 *   **Data Validation**: Comprehensive input validation using Jakarta Validation.
 *   **Docker Support**: Full Docker and Docker Compose setup for easy deployment.
 *   **Global Exception Handling**: Centralized error handling for consistent API responses.
+*   **Multi-language Support**: English and Arabic localization.
+*   **Custom Message Resolution**: Centralized message handling.
 
 ## Technology Stack
 
 *   **Java 21**
 *   **Spring Boot 3.5.3**
 *   **Spring Security**
-*   **PostgreSQL**
-*   **RabbitMQ**
-*   **JJWT (Java JWT)**
+*   **PostgreSQL, Spring Data JPA**
+*   **RabbitMQ, Spring AMQP**
+*   **JWT**
+*   **SpringDoc OpenAPI 3 (Swagger UI)**
+*   **JUnit 5**
+*   **Mockito**
 *   **Lombok**
 *   **Maven**
-*   **Docker & Docker Compose**
+*   **Docker**
 
 ## Prerequisites
 
@@ -34,6 +43,7 @@ Ensure you have the following installed:
 *   **Java 21 SDK**
 *   **Maven 3.8+**
 *   **Docker & Docker Compose**
+*   **Git (for cloning the repository)**
 
 ## Configuration & Setup
 
@@ -96,9 +106,11 @@ To generate your own keys for production:
 4.  Place the files in `src/main/resources/keys/` and update your `.env` path variables accordingly.
 
 
-
-
-
+## Testing
+**Running All Tests**
+```bash
+./mvnw test
+```
 
 ## API Documentation
 Once the application is running, access the interactive Swagger UI:
